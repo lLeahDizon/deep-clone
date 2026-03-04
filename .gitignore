@@ -1,0 +1,5 @@
+.idea
+.qodo
+/*.iml
+node_modules
+bun.lock
