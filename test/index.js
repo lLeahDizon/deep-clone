@@ -32,7 +32,7 @@ describe('deepClone', () => {
   });
   describe('对象', () => {
     it('能够复制普通对象', () => {
-      const a = {name: 'Lemon', child: { name: '小Lemon' } }
+      const a = {name: 'Lemon', child: {name: '小Lemon'}}
       const a2 = deepClone(a)
       assert(a !== a2)
       assert(a.name === a2.name)
@@ -49,10 +49,10 @@ describe('deepClone', () => {
       assert.deepEqual(a, a2)
     });
     it("能够复制函数", () => {
-      const a = function(x, y) {
-        return x+y;
+      const a = function (x, y) {
+        return x + y;
       }
-      a.xxx = { yyy: {zzz: 1}}
+      a.xxx = {yyy: {zzz: 1}}
       const a2 = deepClone(a)
       assert(a !== a2)
       assert(a.xxx.yyy.zzz === a2.xxx.yyy.zzz)
@@ -61,14 +61,14 @@ describe('deepClone', () => {
       assert(a(1, 2) === a2(1, 2))
     })
     it('环也能复制', () => {
-      const a = {name: 'Lemon' }
+      const a = {name: 'Lemon'}
       a.self = a;
       const a2 = deepClone(a)
       assert(a !== a2)
       assert(a.name === a2.name)
       assert(a.self !== a2.self)
     });
-    xit ('不会爆栈', () => {
+    xit('不会爆栈', () => {
       const a = {child: null}
       let b = a
       for (let i = 0; i < 20000; i++) {
@@ -98,6 +98,16 @@ describe('deepClone', () => {
       const a2 = deepClone(a)
       assert(a !== a2)
       assert(a.getTime() === a2.getTime())
+      assert(a.xxx.yyy.zzz === a2.xxx.yyy.zzz)
+      assert(a.xxx.yyy !== a2.xxx.yyy)
+      assert(a.xxx !== a2.xxx)
+    });
+    it('自动跳过原型属性', () => {
+      const a = Object.create({name: 'a'})
+      a.xxx = {yyy: {zzz: 1}}
+      const a2 = deepClone(a)
+      assert(a !== a2)
+      assert.isFalse("name" in a2)
       assert(a.xxx.yyy.zzz === a2.xxx.yyy.zzz)
       assert(a.xxx.yyy !== a2.xxx.yyy)
       assert(a.xxx !== a2.xxx)
